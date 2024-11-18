@@ -1,4 +1,4 @@
-package flinkcore.join;
+package flinkcore.api;
 
 import org.apache.flink.streaming.api.datastream.ConnectedStreams;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -6,7 +6,7 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.CoMapFunction;
 
-public class connect {
+public class t1_connect {
 
     //connect连接并不是得到一个stream，而是得到一个ConnectedStreams连接流。连接流本质上是两个流放到一个流中，内部各保持数据形势不变，彼此之间独立。
     //因此connect之后，需要使用CoMapFunction函数进行同处理，将两个流转换为一个流。
