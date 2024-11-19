@@ -30,9 +30,9 @@ public class SocketWordCount {
 
 
         //基于socker
-//        DataStreamSource<String> source = env.socketTextStream("192.168.217.130", 9999);
+        DataStreamSource<String> source = env.socketTextStream("localhost", 9999);
         //基于集合，算是批处理，有界流
-        DataStreamSource<String> source = env.fromElements("flink", "hadoop", "flink");
+//        DataStreamSource<String> source = env.fromElements("flink", "hadoop", "flink");
 
         SingleOutputStreamOperator<Tuple2<String, Integer>> flatMap = source.flatMap(new FlatMapFunction<String, Tuple2<String, Integer>>() {
             @Override
