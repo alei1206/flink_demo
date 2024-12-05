@@ -11,12 +11,16 @@ import org.apache.flink.connector.base.DeliveryGuarantee;
 import org.apache.flink.connector.datagen.source.DataGeneratorSource;
 import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
+import org.apache.flink.connector.kafka.source.KafkaSource;
+import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.apache.flink.configuration.Configuration;
+
+import javax.lang.model.element.ElementVisitor;
 
 public class KafkaTest {
 
@@ -65,6 +69,30 @@ public class KafkaTest {
     @DisplayName("avro序列化器")
     public void test3() throws Exception {
 
+
+    }
+
+
+    @Test
+    @DisplayName("kafka source test")
+    public void test_source() throws Exception {
+
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
+
+        KafkaSource<String> source = KafkaSource.<String>builder()
+                .setBootstrapServers("node1:9092")
+                .setTopics("test")
+                .setGroupId("my-group")
+                .setStartingOffsets(OffsetsInitializer.earliest())
+                .setValueOnlyDeserializer(new SimpleStringSchema())
+                .build();
+
+        DataStreamSource<String> kafkaSource = env.fromSource(source, WatermarkStrategy.noWatermarks(), "Kafka Source");
+
+        kafkaSource.print();
+
+        env.execute();
 
     }
 
